@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace HitOnThree.git.HealthBar
+namespace ScriptsUnity.HealthBar
 {
     public class HealthBar : MonoBehaviour, IHealthBar
     {
@@ -22,7 +22,7 @@ namespace HitOnThree.git.HealthBar
             else
                 throw new System.ArgumentNullException(_ERR_IN_NULL_STEPS_CLASS);
 
-            if (healthNow <= _stepViewHealth.GetMaxHealth())
+            if (healthNow <= _stepViewHealth.MaxHealth)
                 Health = healthNow;
             else
                 throw new System.ArgumentOutOfRangeException(_ERR_IN_HEALTH_VALUE);

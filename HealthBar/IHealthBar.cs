@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace HitOnThree.git.HealthBar
+namespace ScriptsUnity.HealthBar
 {
     public interface IHealthBar
     {
