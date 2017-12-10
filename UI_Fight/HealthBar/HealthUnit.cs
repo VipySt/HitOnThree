@@ -44,6 +44,8 @@ namespace ScriptsUnity.HealthBar
         public int HealthMax;
         public int Health;
         public float ProcentFloat;
+        public int EnergyMax;
+        public int Energy;
         public string nameObject = string.Empty;
 
         public AbsHealthBar HealthBarObj = null;
@@ -63,8 +65,9 @@ namespace ScriptsUnity.HealthBar
 
         private void Start()
         {
-            HealthBarObj.InitHealthBar(nameObject, HealthMax);
+            HealthBarObj.InitHealthBar(nameObject, HealthMax, EnergyMax);
             HealthBarObj.SetCountHealth(Health, Steps[FindStepIndex(Health)].ColorStep);
+            HealthBarObj.SetEnegyPoints(Energy);
         }
         
         private int FindStepIndex(int health)
