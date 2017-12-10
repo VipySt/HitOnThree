@@ -17,13 +17,17 @@ namespace ScriptsUnity.HealthBar
 
         const string _ERR_NULL_TEXT = "Error. Input textNameUnit is null";
         const string _ERR_NULL_IMAGE = "Error. Input ImageViewHealth is null";
+        const string _ERR_NULL_TEXT_HEALTH = "Error. Input TextViewValueHealth is null";
         const string _ERR_SETTINGS_IMAGE = "Error. Settings of image wrong. ImageType 'Filled', Method 'Horizontal'";
         #endregion
 
         public float ProcentFullHealth;
 
         public Text TextNameUnit = null;
+        public Text TextViewValueHealth = null;
         public Image ImageViewHealth = null;
+
+        public bool InverseViewHealth = false;
 
         private int _maxHealth;
         private int _healt;
@@ -38,6 +42,7 @@ namespace ScriptsUnity.HealthBar
             if (maxHealth > _BAN_HEALTH)
                 _maxHealth = maxHealth;
             else throw new System.ArgumentOutOfRangeException(_ERR_IN_MAX_HEALTH_NEGATIVE);
+            
         }
 
         public override void SetCountHealth(int health, Color color)
@@ -50,6 +55,11 @@ namespace ScriptsUnity.HealthBar
                 _healt = (health > _BAN_HEALTH) ? health : 0;
                 ProcentFullHealth = (float)_healt / _maxHealth;
                 ImageViewHealth.fillAmount = ProcentFullHealth;
+
+                var healthValueView = (InverseViewHealth) ? string.Format("{0} / {1}", health, _maxHealth)
+                                                          : string.Format("{0} / {1}", _maxHealth, health);
+
+                TextViewValueHealth.text = healthValueView;
             }
 
             ImageViewHealth.color = color;
@@ -62,9 +72,13 @@ namespace ScriptsUnity.HealthBar
                 throw new System.ArgumentNullException(_ERR_NULL_TEXT);
             if (ImageViewHealth == null)
                 throw new System.ArgumentNullException(_ERR_NULL_IMAGE);
+            if (TextViewValueHealth == null)
+                throw new System.ArgumentNullException(_ERR_NULL_TEXT_HEALTH);
 
             ImageViewHealth.type = Image.Type.Filled;
             ImageViewHealth.fillMethod = Image.FillMethod.Horizontal;
+            ImageViewHealth.fillOrigin = (InverseViewHealth) ? (int)Image.OriginHorizontal.Right
+                                                             : (int)Image.OriginHorizontal.Left;
         }
 
     }
