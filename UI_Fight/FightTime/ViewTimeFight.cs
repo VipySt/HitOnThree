@@ -41,8 +41,10 @@ namespace ScriptsUnity.FightTime
             TimeMaskLeft.gameObject.SetActive(false);
 
             TimeLeftView.color = ColorBase;
+            TimeMaskLeft.fillAmount = _MAX_FILL_AMOUNT;
 
             _timerRound = _TIMER_ZERO;
+            RecountTimer();
         }
 
         public void StartTimer()
@@ -58,17 +60,34 @@ namespace ScriptsUnity.FightTime
 
         public float AddActicionTime(float timeAction)
         {
-            float delta = MaxTimeRound - _timerRound - timeAction;
-            if (delta >= _TIMER_ZERO)
+            float delta;
+
+            if (TimeMaskLeft.gameObject.activeInHierarchy)
             {
-                var tScale = delta / MaxTimeRound;
-
-                TimeLeftView.color = ColorActicon;
-
-                TimeMaskLeft.gameObject.SetActive(true);
-                TimeMaskLeft.color = ColorBase;
-                TimeMaskLeft.fillAmount = tScale;
+                float amount = TimeMaskLeft.fillAmount - timeAction / MaxTimeRound;
+                if (amount > 0)
+                {
+                    TimeMaskLeft.fillAmount = amount;
+                    delta = amount * MaxTimeRound;
+                }
+                else delta = -1;
             }
+            else
+            {
+                delta = MaxTimeRound - _timerRound - timeAction;
+
+                if (delta >= _TIMER_ZERO)
+                {
+                    var tScale = delta / MaxTimeRound;
+
+                    TimeLeftView.color = ColorActicon;
+
+                    TimeMaskLeft.gameObject.SetActive(true);
+                    TimeMaskLeft.color = ColorBase;
+                    TimeMaskLeft.fillAmount = tScale;
+                }
+            }
+                        
 
             return delta;
         }
@@ -92,6 +111,8 @@ namespace ScriptsUnity.FightTime
 
             if (delta <= _TIMER_ZERO)
             {
+                delta = 0;
+                TextTimerView.text = string.Format("End round to 0.00");
                 StopTimer();
             } //Время рауна вышло
         }
@@ -111,7 +132,7 @@ namespace ScriptsUnity.FightTime
         {
             if (!_working) return;
 
-            _timerRound += Time.deltaTime + MultyTimerSpeed;
+            _timerRound += Time.deltaTime * MultyTimerSpeed;
             RecountTimer();
         }
 
